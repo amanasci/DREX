@@ -1,9 +1,9 @@
 import requests
 import feedparser
-from colorama import Fore, Style  # For colored output
+
 from rich.console import Console
 from rich.table import Table
-from rich.style import Style
+
 from rich.progress import track
 
 console = Console()

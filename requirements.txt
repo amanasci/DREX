@@ -1,0 +1,4 @@
+requests==2.31.0
+feedparser==6.0.10
+rich==13.4.0
+questionary==1.10.0
