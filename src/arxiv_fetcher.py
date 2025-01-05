@@ -1,13 +1,20 @@
 import requests
 import feedparser
 from colorama import Fore, Style  # For colored output
+from rich.console import Console
+from rich.table import Table
+from rich.style import Style
+from rich.progress import track
+
+console = Console()
+
 
 def fetch_feed(categories, max_results=5):
     """Fetch papers from arXiv for the given categories."""
     base_url = "http://export.arxiv.org/api/query?"
     results = []
 
-    for category in categories:
+    for category in track(categories, description="Fetching feeds..."):
         query = f"cat:{category}"
         params = {
             "search_query": query,
@@ -26,22 +33,23 @@ def fetch_feed(categories, max_results=5):
     return results
 
 def display_feed(feed_data):
-    """Display the fetched feed in a readable format."""
+    """Display the fetched feed using rich."""
     for category, feed in feed_data:
-        print(f"\n{Fore.GREEN}=== Feed for '{category}' ==={Style.RESET_ALL}")
-        print(f"{Fore.CYAN}Number of results: {len(feed.entries)}{Style.RESET_ALL}\n")
+        console.print(f"\n[bold green]=== Feed for '{category}' ===[/bold green]")
+        console.print(f"[cyan]Number of results: {len(feed.entries)}[/cyan]\n")
+
+        table = Table(show_header=True, header_style="bold magenta")
+        table.add_column("Title", style="yellow")
+        table.add_column("Authors", style="cyan")
+        table.add_column("Published", style="blue")
+        table.add_column("arXiv ID", style="green")
 
         for entry in feed.entries:
             title = entry.title
             authors = ", ".join(author.name for author in entry.authors)
             published = entry.published
-            abstract = entry.summary
             arxiv_id = entry.id.split("/abs/")[-1]
 
-            # Display the paper details
-            print(f"{Fore.YELLOW}Title:{Style.RESET_ALL} {title}")
-            print(f"{Fore.YELLOW}Authors:{Style.RESET_ALL} {authors}")
-            print(f"{Fore.YELLOW}Published:{Style.RESET_ALL} {published}")
-            print(f"{Fore.YELLOW}arXiv ID:{Style.RESET_ALL} {arxiv_id}")
-            print(f"{Fore.YELLOW}Abstract:{Style.RESET_ALL} {abstract[:200]}...")  # Truncate abstract
-            print(f"{Fore.BLUE}{'-' * 80}{Style.RESET_ALL}\n")
+            table.add_row(title, authors, published, arxiv_id)
+
+        console.print(table)
