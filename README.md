@@ -69,16 +69,16 @@ The configuration is stored in a JSON file located at `config/config.json`. The 
 ## Project Structure
 
 ```
-arxiv-feed-fetcher/
+DREX/
 ├── config/
 │   └── config.json
-├── drex/
-│   └── src/
-│       ├── __pycache__/
+│
+│──── src/
 │       ├── arxiv_fetcher.py
 │       ├── cli.py
 │       └── config_manager.py
 ├── requirements.txt
+├── main.py
 └── README.md
 ```
 
