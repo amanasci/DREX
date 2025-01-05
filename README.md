@@ -90,5 +90,3 @@ arxiv-feed-fetcher/
 - The authors of the `requests`, `feedparser`, `rich`, and `questionary` libraries for their excellent tools.
 
 ---
-
-Feel free to customize this README further based on your specific needs and preferences.
